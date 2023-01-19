@@ -24,3 +24,16 @@ cross apply (select SUBSTRING(SUBSTRING(Mod1.val,Mod2.val+5,len(Mod1.val)-Mod2.v
 where lower(ltrim(command)) like 'select%'
 
 order by [submit_time] desc;
+
+------------------------Get Table name - Query2
+
+select schema_name(t.schema_id),t.name as table_name, 
+concat('[',schema_name(t.schema_id),'].[',t.name,']') as [Full_Table_Name],
+(select count(request_id) from [dbo].[EDP_table_usage] where CHARINDEX(concat('from [',schema_name(t.schema_id),'].[',t.name,']'),lower(command))>0 and lower(login_name) like 'nk%' and lower(ltrim(command)) like 'select%') as SelectCount
+--like concat('%from [',schema_name(t.schema_id),'].[',t.name,']%'))
+--command like 'from [' + schema_name(t.schema_id) + '].[' + t.name + ']'
+--command like 'from')
+from sys.tables t
+--where lower(login_name) like 'nk%'
+order by 2;
+
