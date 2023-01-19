@@ -1,0 +1,26 @@
+------- Get Table name - Query5 - More variables for Re-use calculated values ---------------------------------------------------------------------
+
+--CREATE VIEW v_emp as
+select login_name, command, [submit_time],[Collect_Date]
+
+,Mod01.val as Mod01
+,Mod02.val as Mod02
+,Mod03.val as Mod03
+,Mod0.val as Mod0
+
+,Mod5.val as [Full_Table_Name]
+from [dbo].[EDP_table_usage]
+
+cross apply (SELECT REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(lower(command))) ,'  ',' '+CHAR(7))   ,CHAR(7)+' ','') ,CHAR(7),'')) AS Mod01(val)
+cross apply (select (replace(Mod01.val,'from  (  select','from (select'))) as Mod02(val)
+cross apply (select replace(Mod02.val,'( ','(')) as Mod03(val)
+cross apply (select replace(Mod03.val,'[','')) as Mod04(val)
+cross apply (select trim(replace(replace(Mod04.val,']',''),'from (','' ) )) as Mod0(val)
+cross apply (select trim(replace(Mod0.val,' ( ','('))) as Mod1(val)
+cross apply (select (CHARINDEX('from',lower(Mod1.val)) )) as Mod2(val)
+cross apply (select SUBSTRING(Mod1.val,Mod2.val+5,len(Mod1.val)-Mod2.val)) as Mod3(val)
+cross apply (select SUBSTRING(SUBSTRING(Mod1.val,Mod2.val+5,len(Mod1.val)-Mod2.val),0,CHARINDEX(' ',SUBSTRING(Mod1.val,Mod2.val+5,len(Mod1.val)-Mod2.val)))) as Mod5(val)
+
+where lower(ltrim(command)) like 'select%'
+
+order by [submit_time] desc;
