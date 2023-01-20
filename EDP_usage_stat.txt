@@ -34,6 +34,6 @@ concat('[',schema_name(t.schema_id),'].[',t.name,']') as [Full_Table_Name],
 --command like 'from [' + schema_name(t.schema_id) + '].[' + t.name + ']'
 --command like 'from')
 from sys.tables t
---where lower(login_name) like 'nk%'
+where lower(login_name) like 'nk%'
 order by 2;
 
