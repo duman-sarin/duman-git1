@@ -1,0 +1,21 @@
+#Navigate to repository local folder
+cd C:/Users/duman/Documents/GitHub/duman-git2
+
+#Set config parameters
+git config --global user.name "Duman S"
+git config --global user.email "duman_sarin@yahoo.com"
+
+#Setup repository
+git remote add origin https://github.com/duman-sarin/duman-git2
+
+
+
+
+==================================
+
+git init
+git add -A  #Add to index all content with folders and files
+git add "file_name.txt" #Add to index specific file
+git commit -m 'Added my project'
+git remote add origin git@github.com:sammy/my-new-project.git
+git push -u -f origin main
